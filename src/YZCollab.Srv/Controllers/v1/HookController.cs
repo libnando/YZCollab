@@ -15,15 +15,16 @@ namespace YZCollab.Srv.Controllers
             _hubContext = hubContext;
         }
 
-        private record HookResponseDTO(string Message);
+        public record HookRequestDTO(string Message);
+        public record HookResponseDTO(int Code);
 
-        [HttpPost("{message}")]
+        [HttpPost]
         [ProducesResponseType(typeof(HookResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post(string message)
+        public async Task<IActionResult> Post(HookRequestDTO request)
         {
-            await _hubContext.Clients.All.SendAsync("RegisterLog", $"{message}");
-            var response = new HookResponseDTO($"teste {message}");
+            await _hubContext.Clients.All.SendAsync("RegisterLog", $"{request.Message}");
+            var response = new HookResponseDTO(new Random().Next());
             
             return Ok(response);
         }

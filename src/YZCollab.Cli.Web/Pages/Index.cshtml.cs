@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace YZCollab.Cli.Pages
+namespace YZCollab.Cli.Web.Pages
 {
     public class IndexModel : PageModel
     {

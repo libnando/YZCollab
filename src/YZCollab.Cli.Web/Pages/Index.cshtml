@@ -8,7 +8,7 @@
         <form>
             <h2>YZCollab</h2>
             <input type="text" name="user" placeholder="Qual seu nome?" maxlength="20" required>
-            <button type="button">Entrar</button>
+            <button type="button" name="submit">Entrar</button>
         </form>
     </div>
 </div>
@@ -30,11 +30,19 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const modal = document.getElementById("z-modal");
-        const userInput = modal.querySelector("input[name='user']");
         const form = modal.querySelector("form");
+        const userInput = form.querySelector("input[name='user']");
+        const btnSubmit = form.querySelector("button[name='submit']");       
 
         form.addEventListener("submit", function (event) {
             event.preventDefault();
+        });
+
+        btnSubmit.addEventListener("click", function (event) {
+            event.preventDefault();
+            modal.style.display = "none";
+                
+                app.init(userInput.value);
         });
 
         userInput.addEventListener("keydown", function (event) {

@@ -107,12 +107,14 @@ section#z-container #z-logs{
     width:58%;
     margin:1%;
     height:97%;
+    overflow-y:scroll;
 }
 
 section#z-container #z-users{
     width:38%;
     margin:1%;
     height:97%;
+    overflow-y:scroll;
 }
 
 @media (min-width: 768px) {

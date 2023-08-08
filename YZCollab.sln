@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{06FF8E8A-8A6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5C35A2D3-2A65-4A70-8C91-293F95EFC31A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YZCollab.Cli", "src\YZCollab.Cli\YZCollab.Cli.csproj", "{7B6B669F-3083-4120-8498-90015984AAFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YZCollab.Cli.Web", "src\YZCollab.Cli.Web\YZCollab.Cli.Web.csproj", "{7B6B669F-3083-4120-8498-90015984AAFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YZCollab.Cli.Worker", "src\YZCollab.Cli.Worker\YZCollab.Cli.Worker.csproj", "{6361F38E-112F-4972-8AD1-63C140E0037B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{7B6B669F-3083-4120-8498-90015984AAFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6B669F-3083-4120-8498-90015984AAFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B6B669F-3083-4120-8498-90015984AAFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6361F38E-112F-4972-8AD1-63C140E0037B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6361F38E-112F-4972-8AD1-63C140E0037B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6361F38E-112F-4972-8AD1-63C140E0037B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6361F38E-112F-4972-8AD1-63C140E0037B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AC17B040-361C-4ADF-AB6E-6E594F046021} = {06FF8E8A-8A6B-48D3-BDD3-EE0C07FFBF54}
 		{7B6B669F-3083-4120-8498-90015984AAFE} = {06FF8E8A-8A6B-48D3-BDD3-EE0C07FFBF54}
+		{6361F38E-112F-4972-8AD1-63C140E0037B} = {06FF8E8A-8A6B-48D3-BDD3-EE0C07FFBF54}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB17C69B-693E-477E-91DC-6839FD2DA76F}
