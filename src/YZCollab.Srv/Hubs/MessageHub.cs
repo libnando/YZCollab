@@ -8,18 +8,16 @@ namespace YZCollab.Srv.Hubs
         public MessageHub() {            
         }
 
-        private string? GetQueryParam(string key) => Context.GetHttpContext()?.Request?.Query[key];
+        private string? GetUserName() => Context.GetHttpContext()?.Request?.Query["user"];
 
         public override Task OnConnectedAsync()
         {
-            var name = GetQueryParam("user");
-            return Clients.All.SendAsync("RegisterUser", $"Usuário {name} acabou de entrar.");
+            return Clients.All.SendAsync("RegisterUser", $"Usuário {GetUserName()} acabou de entrar.");
         }
 
         public override Task OnDisconnectedAsync(Exception? exception)
         {
-            var name = GetQueryParam("user");
-            return Clients.All.SendAsync("RegisterUser", $"Usuário {name} saiu.");
+            return Clients.All.SendAsync("RegisterUser", $"Usuário {GetUserName()} saiu.");
         }
 
         public Task RegisterLog(string message)

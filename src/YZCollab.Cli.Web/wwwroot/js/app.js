@@ -1,22 +1,68 @@
-﻿const app = (function () {
+﻿const form = (function () {
+
+    const modal = document.getElementById("z-modal");
+    const form = modal.querySelector("form");
+    const userInput = form.querySelector("input[name='user']");
+    const btnSubmit = form.querySelector("button[name='submit']");
+
+    function submit(event) {
+        event.preventDefault();
+        modal.style.display = "none";
+
+        hub.init(userInput.value);
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+    });
+
+    btnSubmit.addEventListener("click", function (event) {
+        submit(event);
+    });
+
+    userInput.addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
+            submit(event);
+
+            return false;
+        }
+    });
+
+    function init() {
+        modal.style.display = "block";
+    }
+
+    return {
+        init: init
+    };
+})();
+
+
+const hub = (function () {
+
+    function registerEvent(section, message) {
+        const li = document.createElement("li");
+        li.textContent = `${message}`;
+        section.prepend(li);
+    }
 
     async function start(user) {
         try {
+            const urlHub = document.querySelector("main").getAttribute("data-url-hub");
+            const logsSectionList = document.getElementById("z-logs").querySelector("ul");
+            const usersSectionList = document.getElementById("z-users").querySelector("ul");
+
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl(`https://localhost:7202/hub?user=${user}`)
+                .withUrl(`${urlHub}?user=${user}`)
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
 
             connection.on("RegisterLog", (message) => {
-                const li = document.createElement("li");
-                li.textContent = `${message}`;
-                document.getElementById("z-logs").querySelector("ul").appendChild(li);
+                registerEvent(logsSectionList, message);
             });
 
             connection.on("RegisterUser", (message) => {
-                const li = document.createElement("li");
-                li.textContent = `${message}`;
-                document.getElementById("z-users").querySelector("ul").appendChild(li);
+                registerEvent(usersSectionList, message);
             });
 
             connection.onclose(async () => {
@@ -24,7 +70,7 @@
             });
 
             await connection.start();
-            console.log("SignalR Connected.");
+
         } catch (err) {
             console.log(err);
             setTimeout(start, 5000);
