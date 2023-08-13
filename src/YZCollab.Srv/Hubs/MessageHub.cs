@@ -5,9 +5,6 @@ namespace YZCollab.Srv.Hubs
     public class MessageHub : Hub
     {
 
-        public MessageHub() {            
-        }
-
         private string? GetUserName() => Context.GetHttpContext()?.Request?.Query["user"];
 
         public override Task OnConnectedAsync()

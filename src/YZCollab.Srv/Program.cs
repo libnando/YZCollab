@@ -1,3 +1,5 @@
+using StackExchange.Redis;
+using System.Net;
 using YZCollab.Srv.Configuration;
 using YZCollab.Srv.Hubs;
 
@@ -10,14 +12,48 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddVersioning();
-builder.Services.AddSignalR().AddJsonProtocol(); //.AddStackExchangeRedis();
+builder.Services.AddSignalR()
+    .AddJsonProtocol()
+    .AddStackExchangeRedis($"{configuration.GetValue<string>("Redis")}", redisOptions =>
+    {
+        redisOptions.ConnectionFactory = async writer =>
+        {
+            var config = new ConfigurationOptions
+            {
+                AbortOnConnectFail = false
+            };
+
+            config.EndPoints.Add(IPAddress.Loopback, 0);
+            config.SetDefaultPorts(); 
+
+            var connection = await ConnectionMultiplexer.ConnectAsync(config, writer);
+            
+            connection.ConnectionFailed += (_, e) =>
+            {
+                Console.WriteLine("Connection to Redis failed.");
+            };
+
+            if (!connection.IsConnected)
+            {
+                Console.WriteLine("Did not connect to Redis.");
+            }
+
+            return connection;
+        };
+    });
+
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
-        builder =>
+        config =>
         {
-            builder.WithOrigins("https://localhost:7294")
+            var corsOrigins = configuration.GetSection("CorsOrigins").Get<string[]>();
+
+            if (corsOrigins == null)
+                return;
+
+            config.WithOrigins(corsOrigins)
                 .AllowAnyHeader()
                 .WithMethods("GET", "POST")
                 .AllowCredentials();
@@ -38,7 +74,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors();
 app.MapHub<MessageHub>("/hub");
-
 app.Run();
 
 public partial class Program { }

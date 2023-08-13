@@ -4,6 +4,7 @@
     const form = modal.querySelector("form");
     const userInput = form.querySelector("input[name='user']");
     const btnSubmit = form.querySelector("button[name='submit']");
+    const keySubmit = 13;
 
     function submit(event) {
         event.preventDefault();
@@ -21,7 +22,7 @@
     });
 
     userInput.addEventListener("keydown", function (event) {
-        if (event.keyCode === 13) {
+        if (event.keyCode === keySubmit) {
             submit(event);
 
             return false;
@@ -85,3 +86,5 @@ const hub = (function () {
         init: init
     };
 })();
+
+form.init();
