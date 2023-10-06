@@ -43,12 +43,13 @@ const hub = (function () {
 
     function registerEvent(section, message) {
         const li = document.createElement("li");
-        li.textContent = `${message}`;
+        li.innerHTML = `${message}`;
         section.prepend(li);
     }
 
     async function start(user) {
         try {
+           
             const urlHub = document.querySelector("main").getAttribute("data-url-hub");
             const logsSectionList = document.getElementById("z-logs").querySelector("ul");
             const usersSectionList = document.getElementById("z-users").querySelector("ul");
@@ -57,6 +58,8 @@ const hub = (function () {
                 .withUrl(`${urlHub}?user=${user}`)
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
+
+            console.log(`connectionId: ${connection.connectionId}`);
 
             connection.on("RegisterLog", (message) => {
                 registerEvent(logsSectionList, message);
@@ -72,6 +75,7 @@ const hub = (function () {
 
             await connection.start();
 
+            console.log(`connectionId: ${connection.connectionId}`);
         } catch (err) {
             console.log(err);
             setTimeout(start, 5000);
