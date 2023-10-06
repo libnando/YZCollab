@@ -26,7 +26,7 @@ namespace YZCollab.Cli.Worker
                 await httpClient.PostAsJsonAsync(urlHook, msg, stoppingToken);
 
                 _logger.LogInformation(msg.Message);
-                await Task.Delay(20000, stoppingToken);
+                await Task.Delay(15000, stoppingToken);
             }
         }
     }

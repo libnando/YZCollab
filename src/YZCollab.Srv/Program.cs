@@ -2,6 +2,7 @@ using StackExchange.Redis;
 using System.Net;
 using YZCollab.Srv.Configuration;
 using YZCollab.Srv.Hubs;
+using YZCollab.Srv.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -12,36 +13,41 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddVersioning();
-builder.Services.AddSignalR()
-    .AddJsonProtocol()
-    .AddStackExchangeRedis($"{configuration.GetValue<string>("Redis")}", redisOptions =>
-    {
-        redisOptions.ConnectionFactory = async writer =>
-        {
-            var config = new ConfigurationOptions
-            {
-                AbortOnConnectFail = false
-            };
+builder.Services.AddSignalR().AddJsonProtocol();
+builder.Services.AddTransient<IMessageHubService, MessageHubService>();
 
-            config.EndPoints.Add(IPAddress.Loopback, 0);
-            config.SetDefaultPorts(); 
+#region redis
+//.AddStackExchangeRedis($"{configuration.GetValue<string>("Redis")}", redisOptions =>
+// {
+//     redisOptions.ConnectionFactory = async writer =>
+//     {
+//         var config = new ConfigurationOptions
+//         {
+//             AbortOnConnectFail = false
+//         };
 
-            var connection = await ConnectionMultiplexer.ConnectAsync(config, writer);
-            
-            connection.ConnectionFailed += (_, e) =>
-            {
-                Console.WriteLine("Connection to Redis failed.");
-            };
+//         config.EndPoints.Add(IPAddress.Loopback, 0);
+//         config.SetDefaultPorts();
 
-            if (!connection.IsConnected)
-            {
-                Console.WriteLine("Did not connect to Redis.");
-            }
+//         var connection = await ConnectionMultiplexer.ConnectAsync(config, writer);
 
-            return connection;
-        };
-    });
+//         connection.ConnectionFailed += (_, e) =>
+//         {
+//             Console.WriteLine("Connection to Redis failed.");
+//         };
 
+//         if (!connection.IsConnected)
+//         {
+//             Console.WriteLine("Did not connect to Redis.");
+//         }
+
+//         return connection;
+//     };
+// });
+
+#endregion
+
+#region cors
 
 builder.Services.AddCors(options =>
 {
@@ -59,6 +65,8 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         });
 });
+
+#endregion
 
 var app = builder.Build();
 

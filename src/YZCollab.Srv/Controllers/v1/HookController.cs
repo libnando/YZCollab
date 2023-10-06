@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using YZCollab.Srv.Hubs;
+using YZCollab.Srv.Services;
 
 namespace YZCollab.Srv.Controllers
 {
@@ -9,10 +10,10 @@ namespace YZCollab.Srv.Controllers
     [Route("v{version:apiVersion}/hook")]
     public class HookController : ControllerBase
     {
-        private readonly IHubContext<MessageHub> _hubContext;
+        private readonly IMessageHubService _messageHubService;
 
-        public HookController(IHubContext<MessageHub> hubContext) {
-            _hubContext = hubContext;
+        public HookController(IMessageHubService messageHubService) {
+            _messageHubService = messageHubService;
         }
 
         public record HookRequestDTO(string Message);
@@ -23,7 +24,8 @@ namespace YZCollab.Srv.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(HookRequestDTO request)
         {
-            await _hubContext.Clients.All.SendAsync("RegisterLog", $"{request.Message}");
+            await _messageHubService.RegisterLogAsync($"{request.Message}");
+
             var response = new HookResponseDTO(new Random().Next());
             
             return Ok(response);

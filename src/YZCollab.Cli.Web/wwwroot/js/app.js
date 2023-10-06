@@ -1,4 +1,4 @@
-﻿const form = (function () {
+﻿const app = (function () {
 
     const modal = document.getElementById("z-modal");
     const form = modal.querySelector("form");
@@ -67,7 +67,7 @@ const hub = (function () {
             });
 
             connection.onclose(async () => {
-                await start();
+                await start(user);
             });
 
             await connection.start();
@@ -87,4 +87,4 @@ const hub = (function () {
     };
 })();
 
-form.init();
+app.init();
